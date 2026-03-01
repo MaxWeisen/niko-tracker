@@ -1,0 +1,6 @@
+{
+  "name": "niko-tracker",
+  "devDependencies": {
+    "turbo": "^2.8.12"
+  }
+}
