@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package niko.location.v1;
+
+option go_package = "github.com/maxweisen/niko-tracker/gen/go/location/v1;locationv1";
+
+import "google/protobuf/timestamp.proto";
+
+// LocationUpdate represents a single GPS reading from a tracking device.
+message LocationUpdate {
+  string device_id = 1;
+  double latitude = 2;
+  double longitude = 3;
+  float altitude = 4;
+  float speed = 5;
+  
+  // Horizontal Dilution of Precision - a GPS accuracy metric.
+  // Lower is better: <1 = ideal, 1-2 = excellent, 2-5 = good, >10 = poor.
+  float hdop = 6;
+
+  float battery_pct = 7;
+  google.protobuf.Timestamp device_time = 8;
+  google.protobuf.Timestamp server_time = 9;
+}
+
+message StreamLocationRequest {
+  string device_id = 1;
+}
+
+message GetLocationHistoryRequest {
+  string device_id = 1;
+  google.protobuf.Timestamp start_time = 2;
+  google.protobuf.Timestamp end_time = 3;
+  int32 max_points = 4;
+}
+
+message GetLocationHistoryResponse {
+  repeated LocationUpdate locations = 1;
+}
+
+message GetDeviceStatusRequest {
+  string device_id = 1;
+}
+
+message DeviceStatus {
+  string device_id = 1;
+  float battery_pct = 2;
+  bool is_online = 3;
+  google.protobuf.Timestamp last_seen = 4;
+  LocationUpdate last_location = 5;
+}
+
+// LocationService provides RPCs for tracking device location updates and history.
+service LocationService {
+  // StreamLocation returns a stream of location updates for a specified device ID
+  rpc StreamLocation(StreamLocationRequest) returns (stream LocationUpdate);
+  // GetLocationHistory returns a list of location histories for a specified device ID and a given time frame 
+  rpc GetLocationHistory(GetLocationHistoryRequest) returns (GetLocationHistoryResponse);
+  // GetDeviceStatus returns the device status for a specified device ID
+  rpc GetDeviceStatus(GetDeviceStatusRequest) returns (DeviceStatus);
+}
