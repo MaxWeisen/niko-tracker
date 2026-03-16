@@ -37,6 +37,7 @@
           ];
 
           shellHook = ''
+            export PATH="$PWD/node_modules/.bin:$PATH"
             echo "Niko Tracker dev environment loaded"
             echo "Go: $(go version)"
             echo "Node: $(node --version)"
