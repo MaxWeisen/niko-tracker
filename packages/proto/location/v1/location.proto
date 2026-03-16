@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package niko.location.v1;
+package location.v1;
 
 option go_package = "github.com/maxweisen/niko-tracker/gen/go/location/v1;locationv1";
 
@@ -42,7 +42,7 @@ message GetDeviceStatusRequest {
   string device_id = 1;
 }
 
-message DeviceStatus {
+message GetDeviceStatusResponse {
   string device_id = 1;
   float battery_pct = 2;
   bool is_online = 3;
@@ -50,12 +50,16 @@ message DeviceStatus {
   LocationUpdate last_location = 5;
 }
 
+message StreamLocationResponse {
+  LocationUpdate location = 1;
+}
+
 // LocationService provides RPCs for tracking device location updates and history.
 service LocationService {
   // StreamLocation returns a stream of location updates for a specified device ID
-  rpc StreamLocation(StreamLocationRequest) returns (stream LocationUpdate);
-  // GetLocationHistory returns a list of location histories for a specified device ID and a given time frame 
+  rpc StreamLocation(StreamLocationRequest) returns (stream StreamLocationResponse);
+  // GetLocationHistory returns a list of location histories for a specified device ID and a given time frame
   rpc GetLocationHistory(GetLocationHistoryRequest) returns (GetLocationHistoryResponse);
   // GetDeviceStatus returns the device status for a specified device ID
-  rpc GetDeviceStatus(GetDeviceStatusRequest) returns (DeviceStatus);
+  rpc GetDeviceStatus(GetDeviceStatusRequest) returns (GetDeviceStatusResponse);
 }
