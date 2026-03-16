@@ -1,5 +1,6 @@
 {
   "name": "niko-tracker",
+  "packageManager": "pnpm@10.17.1",
   "scripts": {
     "commit": "cz"
   },

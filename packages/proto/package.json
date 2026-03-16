@@ -1,0 +1,7 @@
+{
+  "name": "@niko-tracker/proto",
+  "private": true,
+  "scripts": {
+    "lint": "buf lint"
+  }
+}
